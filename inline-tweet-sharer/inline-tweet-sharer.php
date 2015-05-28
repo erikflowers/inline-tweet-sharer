@@ -70,7 +70,7 @@ function inline_tweet_sharer_create_tweet( $prefix = "", $tweeter = "", $suffix 
     $extraclass=get_option( 'inline-tweet-sharer-extraclass' );
 
     if ( $extraclass ) {
-        $extraclass = '<div class="'.$extraclass.'">';
+        $extraclass = '<span class="'.$extraclass.'">';
     }
 
     $link = $extraclass . '<a class="';
@@ -107,7 +107,7 @@ function inline_tweet_sharer_create_tweet( $prefix = "", $tweeter = "", $suffix 
     $link .= "</a>";
 
     if ( $extraclass ) {
-        $link .= "</div>";
+        $link .= "</span>";
     }
 
     return $link;
@@ -190,45 +190,49 @@ function inline_tweet_sharer_options() {
 
                     <?php wp_nonce_field( 'update-options' ); ?>
                     <?php settings_fields( 'inline-tweet-sharer-group' ); ?>
-
+                    <h3><?php _e( 'Default Options', 'inline-tweet-sharer' ); ?></h3>
                     <table class="form-table">
                         <tbody>
 
                             <tr valign="top">
-                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-default"><?php _e( 'Default Twitter Handle (leave blank for none)', 'inline-tweet-sharer' ); ?>:</label></th>
+                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-default"><?php _e( 'Default Twitter Handle (leave blank for none)', 'inline-tweet-sharer' ); ?>:</label>
+                                    <div class="inline-tweet-sharer-settings">This is the "RT @username:" that will appear before the quoted content. Leave blank if you do not anything added to the beginning quote.</div>
+                                </th>
                                 <td><input type="text" name="inline-tweet-sharer-default" id="inline-tweet-sharer-default" class="regular-text code" value="<?php echo get_option( 'inline-tweet-sharer-default' ); ?>" />
-                                    <br /><?php _e( 'This is the "RT @______: section for tweets before the quoted text, leave blank for no quoted text', 'inline-tweet-sharer' ); ?>
-                                    <br /><?php _e( 'Just place the twitter username, no @, no http://twitter.com/', 'inline-tweet-sharer' ); ?>
+                                <div class="inline-tweet-sharer-settings">Name only, do not use a @</div>
                                 </td>
                             </tr>
 
                             <tr valign="top">
-                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-marker"><?php _e( 'Mark Twitter Links', 'inline-tweet-sharer' ); ?>:</label></th>
+                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-marker"><?php _e( 'Add Inline Tweet Style', 'inline-tweet-sharer' ); ?>:</label>
+                                    <div class="inline-tweet-sharer-settings">This will adding some basic styling to the &lt;a&gt; that surrounds the content. It adds CSS for a background color and twitter icon. Note: adding a class wrapper will not effect this.</div></th>
                                 <td><input type="checkbox" name="inline-tweet-sharer-marker" id="inline-tweet-sharer-marker" value="1" <?php if ( get_option( 'inline-tweet-sharer-marker' ) == 1 ) { echo "checked"; } ?> /></td>
                             </tr>
 
                             <tr valign="top">
-                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-dashicons"><?php _e( 'Use Dashicons', 'inline-tweet-sharer' ); ?>:</label></th>
+                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-dashicons"><?php _e( 'Use Dashicons', 'inline-tweet-sharer' ); ?>:</label>
+                                    <div class="inline-tweet-sharer-settings">Checking this option will use the standard Wordpress admin icon for the Twitter logo in the inline tweet. Leave unchecked to use included PNG icon.</div></th>
                                 <td><input type="checkbox" name="inline-tweet-sharer-dashicons" id="inline-tweet-sharer-dashicons" value="1" <?php if ( get_option( 'inline-tweet-sharer-dashicons' ) == 1 ) { echo "checked"; } ?> /></td>
                             </tr>
 
                             <tr valign="top">
-                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-capitalise"><?php _e( 'Capitalise first letter of Tweet?', 'inline-tweet-sharer' ); ?>:</label></th>
+                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-capitalise"><?php _e( 'Capitalise first letter of Tweet?', 'inline-tweet-sharer' ); ?>:</label>
+                                    <div class="inline-tweet-sharer-settings">This will automatically capitalize the first letter of the tweeted text, regardless if it is capitalized in the content.</div></th>
                                 <td><input type="checkbox" name="inline-tweet-sharer-capitalise" id="inline-tweet-sharer-capitalise" value="1" <?php if ( get_option( 'inline-tweet-sharer-capitalise' ) == 1 ) { echo "checked"; } ?> /></td>
                             </tr>
 
                         </tbody>
                     </table>
 
-                    <h3><?php _e( 'Default Options', 'inline-tweet-sharer' ); ?></h3>
-
                     <table class="form-table">
                         <tbody>
                             <tr valign="top">
-                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-usedefault"><?php _e( 'Use Default Prefix?', 'inline-tweet-sharer' ); ?>:</label></th>
+                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-usedefault"><?php _e( 'Use Default Prefix?', 'inline-tweet-sharer' ); ?>:</label>
+                                    <div class="inline-tweet-sharer-settings">If ticked, the prefix/suffix below will be used if not specified.</div>
+                                </th>
                                 <td>
                                     <input type="checkbox" name="inline-tweet-sharer-usedefault" id="inline-tweet-sharer-usedefault" value="1" <?php checked( get_option( 'inline-tweet-sharer-usedefault' ), 1, true ); ?> />
-                                    <br /><?php _e( 'If ticked, the prefix/suffix below will be used if not specified.', 'inline-tweet-sharer' ); ?>
+                                    <br /><?php _e( '', 'inline-tweet-sharer' ); ?>
                                 </td>
                             </tr>
                             <tr valign="top">
@@ -248,7 +252,22 @@ function inline_tweet_sharer_options() {
 
 
 
-                    <p><?php _e( 'To connect your bit.ly account you need an API key.', 'inline-tweet-sharer' ); ?></p>
+                    
+                    <table class="form-table">
+                        <tbody>
+                            <tr valign="top">
+                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-extraclass"><?php _e( 'Added class for the wrapper div (advanced)', 'inline-tweet-sharer' ); ?>:</label>
+                                    <div class="inline-tweet-sharer-settings">Use this to add an extra class to the wrapper. Useful to control what your tweet link looks like.</div></th>
+                                <td><input type="text" name="inline-tweet-sharer-extraclass" id="inline-tweet-sharer-extraclass" class="regular-text code" value="<?php echo get_option( 'inline-tweet-sharer-extraclass' ); ?>" />
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-bitly"><?php _e( 'Enable Bitly Integration', 'inline-tweet-sharer' ); ?>:</label></th>
+                                <td><input type="checkbox" name="inline-tweet-sharer-bitly" id="inline-tweet-sharer-bitly" value="1" <?php if ( get_option( 'inline-tweet-sharer-bitly' ) == 1 ) { echo "checked"; } ?> /></td>
+                            </tr>
+                            <tr valign="top">
+                                <td colspan="2">
+                                    <p><?php _e( 'To connect your bit.ly account you need an API key.', 'inline-tweet-sharer' ); ?></p>
                     <p><strong><?php _e( 'To get your API Key:-', 'inline-tweet-sharer' ); ?></strong></p>
                     <ol>
                         <li><?php _e( 'Go to the OAuth App Creation Page on bit.ly at ', 'inline-tweet-sharer' ); ?> <a href="https://bitly.com/a/oauth_apps">https://bitly.com/a/oauth_apps</a></li>
@@ -265,12 +284,8 @@ function inline_tweet_sharer_options() {
                         <li><?php _e( 'Add your Generic Access Token Below.', 'inline-tweet-sharer' ); ?></li>
                     </ol>
                     <p><strong><?php _e( 'Still Struggling?', 'inline-tweet-sharer' ); ?></strong> <?php _e( 'You can read a complete guide (with pictures!) on the ', 'inline-tweet-sharer' ); ?><a href="http://winwar.co.uk/documentation/inline-tweet-sharer/#5?utm_source=plugins&utm_medium=settingspage&utm_campaign=inlinetweetsharer"><?php _e( 'Inline Tweet Sharer Plugin Page', 'inline-tweet-sharer' ); ?></a>.</p>
-                    <table class="form-table">
-                        <tbody>
-                            <tr valign="top">
-                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-bitly"><?php _e( 'Enable Bitly Integration', 'inline-tweet-sharer' ); ?>:</label></th>
-                                <td><input type="checkbox" name="inline-tweet-sharer-bitly" id="inline-tweet-sharer-bitly" value="1" <?php if ( get_option( 'inline-tweet-sharer-bitly' ) == 1 ) { echo "checked"; } ?> /></td>
-                            </tr>
+                    
+                                </td>
                             <tr valign="top">
                                 <th scope="row" style="width:400px"><label for="inline-tweet-sharer-bitlyapikey"><?php _e( 'Your Generic Access Token', 'inline-tweet-sharer' ); ?>:</label></th>
                                 <td><input type="text" name="inline-tweet-sharer-bitlyapikey" id="inline-tweet-sharer-bitlyapikey" class="regular-text code" value="<?php echo get_option( 'inline-tweet-sharer-bitlyapikey' ); ?>" />
@@ -284,12 +299,6 @@ function inline_tweet_sharer_options() {
                                         <option value="bitly.com" <?php if ( "bitly.com" == get_option( 'inline-tweet-sharer-urlshortened' ) ) { echo "selected"; } ?>>bitly.com</option>
                                         <option value="j.mp" <?php if ( "j.mp" == get_option( 'inline-tweet-sharer-urlshortened' ) ) { echo "selected"; } ?>>j.mp</option>
                                     </select>
-                                </td>
-                            </tr>
-                            <tr valign="top">
-                                <th scope="row" style="width:400px"><label for="inline-tweet-sharer-extraclass"><?php _e( 'Added class for the wrapper div (advanced)', 'inline-tweet-sharer' ); ?>:</label></th>
-                                <td><input type="text" name="inline-tweet-sharer-extraclass" id="inline-tweet-sharer-extraclass" class="regular-text code" value="<?php echo get_option( 'inline-tweet-sharer-extraclass' ); ?>" />
-                                    <br /><?php _e( 'Use this to add an extra class to the wrapper, use this to control what your tweet link looks like.', 'inline-tweet-sharer' ); ?>
                                 </td>
                             </tr>
                         </tbody>
